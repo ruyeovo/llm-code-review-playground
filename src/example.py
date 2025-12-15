@@ -1,10 +1,4 @@
-@Override
-    public void setActivityController(IActivityController controller, boolean imAMonkey) {
-        mAmInternal.enforceCallingPermission(android.Manifest.permission.SET_ACTIVITY_WATCHER,
-                "setActivityController()");
-        synchronized (mGlobalLock) {
-            mController = controller;
-            mControllerIsAMonkey = imAMonkey;
-            Watchdog.getInstance().setActivityController(controller);
-        }
-    }
+# src/example.py
+def foo(x):
+    if x == None:
+        return 1 / x   # 明显问题，LLM 一定会说
