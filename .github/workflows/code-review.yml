@@ -1,7 +1,7 @@
 name: LLM Code Review
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize]
 
 permissions:
@@ -13,11 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout PR 代码
-      - name: Checkout repository
+      # ⚠️ 关键：checkout base 分支，而不是 PR 分支
+      - name: Checkout base branch (safe)
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
 
-      # 2️⃣ Debug：确认 OpenAI Key 已正确注入（强烈建议保留）
+      # 🔍 Debug（现在一定能看到 key）
       - name: Debug OPENAI_API_KEY presence
         shell: bash
         env:
@@ -32,7 +34,7 @@ jobs:
             echo "Key length: ${#OPENAI_API_KEY}"
           fi
 
-      # 3️⃣ 运行 LLM Code Reviewer
+      # 🤖 真正运行 LLM Code Reviewer
       - name: Run LLM Code Reviewer
         uses: tusgino/llm-code-reviewer@v1
         with:
