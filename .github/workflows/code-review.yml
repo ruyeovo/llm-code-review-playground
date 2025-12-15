@@ -1,0 +1,40 @@
+name: LLM Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout PR 代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Debug：确认 OpenAI Key 已正确注入（强烈建议保留）
+      - name: Debug OPENAI_API_KEY presence
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          echo "==== DEBUG OPENAI_API_KEY ===="
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "❌ OPENAI_API_KEY is EMPTY"
+            exit 1
+          else
+            echo "✅ OPENAI_API_KEY is PRESENT"
+            echo "Key length: ${#OPENAI_API_KEY}"
+          fi
+
+      # 3️⃣ 运行 LLM Code Reviewer
+      - name: Run LLM Code Reviewer
+        uses: tusgino/llm-code-reviewer@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
