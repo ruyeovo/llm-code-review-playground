@@ -1,10 +1,8 @@
-@Override
-    public void setActivityController(IActivityController controller, boolean imAMonkey) {
-        mAmInternal.enforceCallingPermission(android.Manifest.permission.SET_ACTIVITY_WATCHER,
-                "setActivityController()");
-        synchronized (mGlobalLock) {
-            mController = controller;
-            mControllerIsAMonkey = imAMonkey;
-            Watchdog.getInstance().setActivityController(controller);
-        }
-    }
+def process(value):
+    if value == None:        # ❌ 风格问题
+        return 0
+
+    if value > 0:
+        return 100 / value  # ❌ 潜在 ZeroDivision
+    else:
+        return 1
