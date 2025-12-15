@@ -7,4 +7,5 @@
             mControllerIsAMonkey = imAMonkey;
             Watchdog.getInstance().setActivityController(controller);
         }
+        #11
     }
